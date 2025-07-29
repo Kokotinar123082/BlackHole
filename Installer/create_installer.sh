@@ -34,8 +34,8 @@ fi
 for channels in 2 16 64 128 256; do
     # Env
     ch=$channels"ch"
-    driverVartiantName=$driverName$ch
-    bundleID="audio.existential.$driverVartiantName"
+    driverVariantName=$driverName$ch
+    bundleID="audio.existential.$driverVariantName"
     
     # Build
     xcodebuild \
@@ -43,10 +43,10 @@ for channels in 2 16 64 128 256; do
       -configuration Release \
       -target BlackHole CONFIGURATION_BUILD_DIR=build \
       PRODUCT_BUNDLE_IDENTIFIER=$bundleID \
-      GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS 
-      kNumber_Of_Channels='$channels' 
-      kPlugIn_BundleID=\"'$bundleID'\" 
-      kDriver_Name=\"'$driverName'\"'
+      GCC_PREPROCESSOR_DEFINITIONS="\$GCC_PREPROCESSOR_DEFINITIONS \
+      kNumber_Of_Channels=$channels \
+      kPlugIn_BundleID=\\\"$bundleID\\\" \
+      kDriver_Name=\\\"$driverName\\\""
     
     # Generate a new UUID
     uuid=$(uuidgen)
@@ -54,7 +54,7 @@ for channels in 2 16 64 128 256; do
     mv Temp.plist build/BlackHole.driver/Contents/Info.plist
     
     mkdir Installer/root
-    driverBundleName=$driverVartiantName.driver
+    driverBundleName=$driverVariantName.driver
     mv build/BlackHole.driver Installer/root/$driverBundleName
     rm -r build
     
@@ -105,7 +105,7 @@ for channels in 2 16 64 128 256; do
     </installer-gui-script>" >> distribution.xml
     
     # Build
-    installerPkgName="$driverVartiantName-$version.pkg"
+    installerPkgName="$driverVariantName-$version.pkg"
     productbuild \
       --sign $devTeamID \
       --distribution distribution.xml \
